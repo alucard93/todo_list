@@ -17,6 +17,7 @@ class _TasksListPageState extends State<TasksListPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
       ),
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => const AddTask(),
     );
@@ -90,8 +91,9 @@ class _TasksListPageState extends State<TasksListPage> {
       ),
 
       floatingActionButton: FloatingActionButton.extended(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(600)),
         onPressed: addTask,
-        label: Text("Adicionar"),
+        label: Text("Nova tarefa"),
         icon: Icon(Icons.add),
       ),
     );

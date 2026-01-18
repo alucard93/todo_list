@@ -41,7 +41,12 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 10,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
 
       child: Form(
         key: formKey,
