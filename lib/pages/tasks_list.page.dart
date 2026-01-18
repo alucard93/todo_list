@@ -30,12 +30,6 @@ class _TasksListPageState extends State<TasksListPage> {
     return Scaffold(
       appBar: AppBar(title: Text('Tarefas'), centerTitle: true, elevation: 1),
 
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text("Adicionar"),
-        icon: Icon(Icons.add),
-      ),
-
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
@@ -78,6 +72,14 @@ class _TasksListPageState extends State<TasksListPage> {
             );
           },
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          
+        },
+        label: Text("Adicionar"),
+        icon: Icon(Icons.add),
       ),
     );
   }
