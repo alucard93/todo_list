@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.model.dart';
+import 'package:todo_list/widgets/add_task.widget.dart';
 
 class TasksListPage extends StatefulWidget {
   const TasksListPage({super.key});
@@ -9,21 +10,23 @@ class TasksListPage extends StatefulWidget {
 }
 
 class _TasksListPageState extends State<TasksListPage> {
-  final List<Task> tasks = [
-    Task(
-      title: "Marcar uma reunião",
-      description: "Reunião sobre negócios",
-      isImportant: true,
-    ),
+  final List<Task> tasks = [];
 
-    Task(title: "Comprar mantimentos", description: "Leite, pão, ovos, frutas"),
+  void addTask() async {
+    final newTask = await showModalBottomSheet<Task>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+      ),
+      context: context,
+      builder: (ctx) => const AddTask(),
+    );
 
-    Task(
-      title: "Fazer exercícios",
-      description: "Caminhada de 30 minutos no parque",
-      isImportant: true,
-    ),
-  ];
+    setState(() {
+      if (newTask != null) {
+        tasks.add(newTask);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +46,42 @@ class _TasksListPageState extends State<TasksListPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: ListTile(
-                title: Text(task.title),
-                subtitle: Text(task.description ?? ""),
-                leading: Checkbox(
-                  value: task.isCompleted,
-                  onChanged: (value) {
-                    setState(() {
-                      task.changeStatus(value ?? false);
-                    });
-                  },
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    task.isImportant ? Icons.star : Icons.star_border,
-                    color: Colors.indigo,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      task.changeImportance();
-                    });
-                  },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: task.isCompleted,
+                      onChanged: (value) {
+                        setState(() {
+                          task.changeStatus(value ?? false);
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(task.title),
+                          if ((task.description ?? "").isNotEmpty)
+                            Text(task.description!),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        task.isImportant ? Icons.star : Icons.star_border,
+                        color: Colors.indigo,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          task.changeImportance();
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
             );
@@ -75,9 +90,7 @@ class _TasksListPageState extends State<TasksListPage> {
       ),
 
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          
-        },
+        onPressed: addTask,
         label: Text("Adicionar"),
         icon: Icon(Icons.add),
       ),
