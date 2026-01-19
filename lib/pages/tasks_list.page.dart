@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.model.dart';
+import 'package:todo_list/pages/task_detail.page.dart';
 import 'package:todo_list/widgets/add_task.widget.dart';
 
 class TasksListPage extends StatefulWidget {
@@ -47,42 +48,38 @@ class _TasksListPageState extends State<TasksListPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: task.isCompleted,
-                      onChanged: (value) {
-                        setState(() {
-                          task.changeStatus(value ?? false);
-                        });
-                      },
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TaskDetailPage(),
                     ),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(task.title),
-                          if ((task.description ?? "").isNotEmpty)
-                            Text(task.description!),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        task.isImportant ? Icons.star : Icons.star_border,
-                        color: Colors.indigo,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          task.changeImportance();
-                        });
-                      },
-                    ),
-                  ],
+                  );
+                },
+                leading: Checkbox(
+                  value: task.isCompleted,
+                  onChanged: (value) {
+                    setState(() {
+                      task.changeStatus(value ?? false);
+                    });
+                  },
+                ),
+                title: Text(task.title),
+                subtitle: (task.description ?? '').isNotEmpty
+                    ? Text(task.description!)
+                    : null,
+                trailing: IconButton(
+                  icon: Icon(
+                    task.isImportant ? Icons.star : Icons.star_border,
+                    color: Colors.indigo,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      task.changeImportance();
+                    });
+                  },
                 ),
               ),
             );
