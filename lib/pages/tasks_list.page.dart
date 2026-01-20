@@ -30,6 +30,18 @@ class _TasksListPageState extends State<TasksListPage> {
     });
   }
 
+  void updateTask(Task task, int index) async {
+    final taskUpdated = await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => TaskDetailPage(task: task)));
+
+    if (taskUpdated != null) {
+      setState(() {
+        tasks[index] = taskUpdated;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,14 +87,7 @@ class _TasksListPageState extends State<TasksListPage> {
                   },
                 ),
 
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TaskDetailPage(task: task),
-                    ),
-                  );
-                },
+                onTap: () => updateTask(task, index),
               ),
             );
           },

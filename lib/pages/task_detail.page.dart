@@ -11,7 +11,29 @@ class TaskDetailPage extends StatefulWidget {
 }
 
 class _TaskDetailPageState extends State<TaskDetailPage> {
-  final titleController = TextEditingController(text: widget.task.title);
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  late bool isImportant;
+
+  @override
+  void initState() {
+    super.initState();
+    isImportant = widget.task.isImportant;
+    titleController.text = widget.task.title;
+    descriptionController.text = widget.task.description ?? '';
+  }
+
+  saveTask() {
+    final updatedTask = widget.task;
+    updatedTask.isImportant = isImportant;
+    updatedTask.title = titleController.text;
+    updatedTask.description = descriptionController.text.isEmpty
+        ? null
+        : descriptionController.text;
+
+    Navigator.of(context).pop(updatedTask);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +41,12 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(
-              !widget.task.isImportant ? Icons.star_border : Icons.star,
-            ),
+            onPressed: () {
+              setState(() {
+                isImportant = !isImportant;
+              });
+            },
+            icon: Icon(!isImportant ? Icons.star_border : Icons.star),
           ),
         ],
       ),
@@ -31,11 +55,15 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            TextField(decoration: InputDecoration(labelText: 'Título')),
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(labelText: 'Título'),
+            ),
 
             SizedBox(height: 20),
 
             TextField(
+              controller: descriptionController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Descrição',
@@ -45,7 +73,12 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
 
             SizedBox(height: 40),
 
-            TextButton(onPressed: () {}, child: Text('Salvar tarefaa')),
+            TextButton(
+              onPressed: () {
+                saveTask();
+              },
+              child: Text('Salvar tarefa'),
+            ),
 
             Spacer(),
 
