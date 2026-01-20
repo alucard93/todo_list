@@ -50,14 +50,7 @@ class _TasksListPageState extends State<TasksListPage> {
               ),
               child: ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const TaskDetailPage(),
-                    ),
-                  );
-                },
+
                 leading: Checkbox(
                   value: task.isCompleted,
                   onChanged: (value) {
@@ -81,6 +74,15 @@ class _TasksListPageState extends State<TasksListPage> {
                     });
                   },
                 ),
+
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TaskDetailPage(task: task),
+                    ),
+                  );
+                },
               ),
             );
           },
