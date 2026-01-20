@@ -16,6 +16,8 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
 
   late bool isImportant;
 
+  final formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +26,11 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
     descriptionController.text = widget.task.description ?? '';
   }
 
-  saveTask() {
+  void saveTask() {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
     final updatedTask = widget.task;
     updatedTask.isImportant = isImportant;
     updatedTask.title = titleController.text;
@@ -53,47 +59,58 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
 
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(labelText: 'Título'),
-            ),
-
-            SizedBox(height: 20),
-
-            TextField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Descrição',
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: titleController,
+                decoration: InputDecoration(labelText: 'Título'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'O título é obrigatório';
+                  }
+                  return null;
+                },
               ),
-              maxLines: 5,
-            ),
 
-            SizedBox(height: 40),
+              SizedBox(height: 20),
 
-            TextButton(
-              onPressed: () {
-                saveTask();
-              },
-              child: Text('Salvar tarefa'),
-            ),
-
-            Spacer(),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Criada Sex, 24 de mar"),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.delete_outline),
-                  iconSize: 30,
+              TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Descrição',
                 ),
-              ],
-            ),
-          ],
+                maxLines: 5,
+              ),
+
+              SizedBox(height: 40),
+
+              TextButton(
+                onPressed: () {
+                  saveTask();
+                },
+                child: Text('Salvar tarefa'),
+              ),
+
+              Spacer(),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Criada Sex, 24 de mar"),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    icon: Icon(Icons.delete_outline),
+                    iconSize: 30,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

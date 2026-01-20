@@ -37,7 +37,11 @@ class _TasksListPageState extends State<TasksListPage> {
 
     if (taskUpdated != null) {
       setState(() {
-        tasks[index] = taskUpdated;
+        if (taskUpdated is Task) {
+          tasks[index] = taskUpdated;
+        } else {
+          tasks.removeAt(index);
+        }
       });
     }
   }
