@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.model.dart';
 import 'package:todo_list/pages/task_detail.page.dart';
+import 'package:todo_list/themes/app_colors.dart';
 import 'package:todo_list/widgets/add_task.widget.dart';
 
 class TasksListPage extends StatefulWidget {
@@ -48,6 +49,7 @@ class _TasksListPageState extends State<TasksListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
       appBar: AppBar(title: Text('Tarefas'), centerTitle: true, elevation: 1),
 
@@ -59,14 +61,7 @@ class _TasksListPageState extends State<TasksListPage> {
             final task = tasks[index];
 
             return Card(
-              elevation: 3,
-              color: Colors.indigo[50],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
               child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-
                 leading: Checkbox(
                   value: task.isCompleted,
                   onChanged: (value) {
@@ -82,7 +77,7 @@ class _TasksListPageState extends State<TasksListPage> {
                 trailing: IconButton(
                   icon: Icon(
                     task.isImportant ? Icons.star : Icons.star_border,
-                    color: Colors.indigo,
+                    color: appColors.primaryColor,
                   ),
                   onPressed: () {
                     setState(() {
