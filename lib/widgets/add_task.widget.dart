@@ -40,6 +40,7 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -58,10 +59,8 @@ class _AddTaskState extends State<AddTask> {
               children: [
                 Text(
                   "Adicionar Tarefa",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    fontFamily: "Poppins",
                   ),
                 ),
 

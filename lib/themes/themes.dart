@@ -2,7 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/themes/app_colors.dart';
 
 ThemeData darkTheme() {
-  return ThemeData.dark();
+  const primaryColor = Colors.orange;
+  return ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: primaryColor,
+    fontFamily: "Poppins",
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black,
+      foregroundColor: Colors.white,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primaryColor,
+      foregroundColor: Colors.white,
+    ),
+    cardTheme: CardThemeData(
+      color: primaryColor.withValues(alpha: 0.5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+
+    listTileTheme: ListTileThemeData(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.all(primaryColor),
+      checkColor: WidgetStateProperty.all(Colors.white),
+    ),
+
+    extensions: [AppColors(primaryColor: primaryColor)],
+  );
 }
 
 ThemeData lightTheme() {
@@ -34,6 +64,10 @@ ThemeData lightTheme() {
 
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
     ),
 
     extensions: [AppColors(primaryColor: primaryColor)],
