@@ -8,11 +8,16 @@ class AddTask extends StatefulWidget {
   State<AddTask> createState() => _AddTaskState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _AddTaskState extends State<AddTask> with SingleTickerProviderStateMixin {
   var isImportant = false;
-  var showDescription = false;
+  var isContainerOpen = false;
+  var containerHeight = 0.0;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+
+  late AnimationController iconAnimationController;
+  late Animation<double> iconAnimation;
+  late Animation<Color?> colorAnimation;
 
   final formKey = GlobalKey<FormState>();
 
@@ -32,7 +37,30 @@ class _AddTaskState extends State<AddTask> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    iconAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+
+    iconAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(iconAnimationController);
+
+    colorAnimation = ColorTween(
+      begin: Colors.red,
+      end: Colors.green,
+    ).animate(iconAnimationController);
+
+    // iconAnimationController.repeat();
+  }
+
+  @override
   void dispose() {
+    iconAnimationController.dispose();
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();
@@ -57,11 +85,17 @@ class _AddTaskState extends State<AddTask> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Adicionar Tarefa",
-                  style: theme.textTheme.titleLarge!.copyWith(
-                    fontFamily: "Poppins",
-                  ),
+                AnimatedBuilder(
+                  animation: iconAnimationController,
+                  builder: (_, _) {
+                    return Text(
+                      "Adicionar Tarefa",
+                      style: theme.textTheme.titleLarge!.copyWith(
+                        color: colorAnimation.value,
+                        fontFamily: "Poppins",
+                      ),
+                    );
+                  },
                 ),
 
                 Spacer(),
@@ -93,22 +127,40 @@ class _AddTaskState extends State<AddTask> {
               },
             ),
 
-            if (showDescription)
-              TextField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Adicionar informações",
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              height: containerHeight,
+              child: Visibility(
+                visible: containerHeight != 0,
+                child: TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Adicionar informações",
+                  ),
                 ),
               ),
+            ),
 
             Row(
               children: [
                 GestureDetector(
-                  child: Icon(Icons.sort),
+                  child: AnimatedIcon(
+                    color: colorAnimation.value,
+                    icon: AnimatedIcons.menu_close,
+                    progress: iconAnimation,
+                  ),
                   onTap: () {
+                    isContainerOpen = !isContainerOpen;
+
                     setState(() {
-                      showDescription = !showDescription;
+                      if (isContainerOpen) {
+                        iconAnimationController.forward();
+                        containerHeight = 60;
+                      } else {
+                        iconAnimationController.reverse();
+                        containerHeight = 0;
+                      }
                     });
                   },
                 ),

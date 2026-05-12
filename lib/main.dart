@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:todo_list/models/task.model.dart';
+import 'package:todo_list/pages/config.page.dart';
+import 'package:todo_list/pages/task_detail.page.dart';
 import 'package:todo_list/pages/tasks_list.page.dart';
+import 'package:todo_list/routes.dart';
 import 'package:todo_list/store/theme.store.dart';
 import 'package:todo_list/themes/themes.dart';
 
@@ -29,6 +33,14 @@ class MyApp extends StatelessWidget {
           theme: lightTheme(),
           darkTheme: darkTheme(),
           home: TasksListPage(),
+          initialRoute: MyRoutes.listTasks,
+          routes: {
+            MyRoutes.listTasks: (context) => TasksListPage(),
+            MyRoutes.taskDetail: (context) => TaskDetailPage(
+              task: ModalRoute.of(context)!.settings.arguments as Task,
+            ),
+            MyRoutes.configUser: (context) => ConfigPage(),
+          },
         );
       },
     );

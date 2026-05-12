@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.model.dart';
-import 'package:todo_list/pages/task_detail.page.dart';
+import 'package:todo_list/routes.dart';
+
 import 'package:todo_list/themes/app_colors.dart';
 import 'package:todo_list/widgets/add_task.widget.dart';
-
-import 'config.page.dart';
 
 class TasksListPage extends StatefulWidget {
   const TasksListPage({super.key});
@@ -34,14 +33,18 @@ class _TasksListPageState extends State<TasksListPage> {
   }
 
   void updateTask(Task task, int index) async {
-    final taskUpdated = await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => TaskDetailPage(task: task)));
+    // final taskUpdated = await Navigator.of(
+    //   context,
+    // ).push(MaterialPageRoute(builder: (context) => TaskDetailPage(task: task)));
 
-    if (taskUpdated != null) {
+    final resultUpdate = await Navigator.of(
+      context,
+    ).pushNamed(MyRoutes.taskDetail, arguments: task);
+
+    if (resultUpdate != null) {
       setState(() {
-        if (taskUpdated is Task) {
-          tasks[index] = taskUpdated;
+        if (resultUpdate is Task) {
+          tasks[index] = resultUpdate;
         } else {
           tasks.removeAt(index);
         }
@@ -60,9 +63,10 @@ class _TasksListPageState extends State<TasksListPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => ConfigPage()));
+              // Navigator.of(
+              //   context,
+              // ).push(MaterialPageRoute(builder: (context) => ConfigPage()));
+              Navigator.of(context).pushNamed(MyRoutes.configUser);
             },
             icon: Icon(Icons.settings),
           ),
