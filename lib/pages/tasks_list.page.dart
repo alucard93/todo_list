@@ -4,6 +4,8 @@ import 'package:todo_list/pages/task_detail.page.dart';
 import 'package:todo_list/themes/app_colors.dart';
 import 'package:todo_list/widgets/add_task.widget.dart';
 
+import 'config.page.dart';
+
 class TasksListPage extends StatefulWidget {
   const TasksListPage({super.key});
 
@@ -51,7 +53,21 @@ class _TasksListPageState extends State<TasksListPage> {
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
-      appBar: AppBar(title: Text('Tarefas'), centerTitle: true, elevation: 1),
+      appBar: AppBar(
+        title: Text('Tarefas'),
+        centerTitle: true,
+        elevation: 1,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => ConfigPage()));
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
+      ),
 
       body: Padding(
         padding: const EdgeInsets.all(10.0),
